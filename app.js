@@ -40,8 +40,7 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 twit.stream('user', function(stream) {
   stream.on('data', function (data) {
     if ('text' in data && 'entities' in data) {
-      console.log(data.text);
-      console.dir(data.entities);
+      io.sockets.emit('tweet', data.text);
     }
   });
 });
