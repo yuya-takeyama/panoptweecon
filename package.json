@@ -1,0 +1,12 @@
+{
+    "name": "panoptweecon"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "2.5.0"
+    , "ejs": ">= 0.0.1"
+    , "ntwitter": "0.2.9-2"
+    , "confu" : "0.0.3"
+    , "socket.io": "0.8.x"
+  }
+}
