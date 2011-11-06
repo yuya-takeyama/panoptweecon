@@ -15,4 +15,18 @@ describe('EntitiesParser', function () {
     });
     expect(result.urls).toEqual(['http://example.com/']);
   });
+
+  it('should parse expanded_url uniquely', function () {
+    var result = parser.parse({
+      'urls':[
+        {"expanded_url":'http://example.com/'},
+        {"expanded_url":'http://example.com/'},
+        {"expanded_url":'http://example.net/'}
+      ]
+    });
+    expect(result.urls).toEqual([
+      'http://example.com/',
+      'http://example.net/',
+    ]);
+  });
 });
