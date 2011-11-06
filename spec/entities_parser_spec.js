@@ -35,5 +35,30 @@ describe('EntitiesParser', function () {
       var result = parser.parse({'urls':[]});
       expect(result.urls).toEqual([]);
     });
+
+    it('should parse hashtags as array', function () {
+      var result = parser.parse({
+        'hashtags': [
+          {'text':'Foo'}
+        ]
+      });
+      expect(result.hashtags).toEqual(['Foo']);
+    });
+
+    it('should parse hashtags uniquely', function () {
+      var result = parser.parse({
+        'hashtags': [
+          {'text':'Foo'},
+          {'text':'Foo'},
+          {'text':'Bar'}
+        ]
+      });
+      expect(result.hashtags).toEqual(['Foo', 'Bar']);
+    });
+
+    it('should return empty array if it has no hashtags', function () {
+      var result = parser.parse({'hashtags': []});
+      expect(result.hashtags).toEqual([]);
+    });
   });
 });
