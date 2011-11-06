@@ -8,5 +8,6 @@
     , "ntwitter": "0.2.9-2"
     , "confu" : "0.0.3"
     , "socket.io": "0.8.x"
+    , "mongodb" : "0.9.6-23"
   }
 }
