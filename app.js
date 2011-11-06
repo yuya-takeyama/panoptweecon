@@ -58,7 +58,7 @@ app.listen(3000, function () {
         throw err;
       }
 
-      twit.stream('user', function(stream) {
+      twit.stream('statuses/sample', function(stream) {
         stream.on('data', function (data) {
           var tweet, entities;
           if ('text' in data && 'entities' in data) {
