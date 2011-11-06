@@ -29,4 +29,9 @@ describe('EntitiesParser', function () {
       'http://example.net/',
     ]);
   });
+
+  it('should return empty array if it has no URLs', function () {
+    var result = parser.parse({'urls':[]});
+    expect(result.urls).toEqual([]);
+  });
 });
