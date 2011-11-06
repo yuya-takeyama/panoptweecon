@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript" src="/javascripts/socket.io.js"></script>
+    <script type="text/javascript">
+      $(function () {
+        var escapeHtml = (function() {
+          var map = {"<":"&lt;", ">":"&gt;", "&":"&amp;", "'":"&#39;", "\"":"&quot;", " ":"&nbsp;"};
+          var replaceStr = function(s){ return map[s]; };
+          return function(str) { return str.replace(/<|>|&|'|"|\s/g, replaceStr); };
+        })();
+
+        var socket = io.connect('http://' + document.location.host);
+
+        socket.on('tweet', function (tweet) {
+          $('#tweets').prepend(
+            '<div class="tweet">' +
+            '<span class="twitter_user">' +
+            '<a href="http://twitter.com/' + tweet.screen_name + '">' +
+            '<span class="image">' +
+            '<img src="' + escapeHtml(tweet.profile_image_url) + '" alt="' + escapeHtml(tweet.screen_name) + '" />' +
+            '</span>' +
+            '<span class="screen_name">' +
+            '@' + tweet.screen_name +
+            '</span>' +
+            '</a>' +
+            '</span>' +
+            '<span class="text">' + tweet.text + '</span>' +
+            '</span>' +
+            '<ul>' +
+            tweet.urls.map(function (url) {
+              return '<li><a href="' + escapeHtml(url) + '">' + escapeHtml(url) + '</a></li>'
+            }).join('') +
+            '</ul>' +
+            '</div>'
+          );
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <%- body %>
+  </body>
+</html>
