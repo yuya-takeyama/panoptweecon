@@ -6,7 +6,10 @@ var express = require('express')
   , routes = require('./routes')
   , twitter = require('ntwitter')
   , config = require('confu')(__dirname, 'config.json')
-  , twit = new twitter(config.twitter);
+  , twit = new twitter(config.twitter)
+  , EntitiesParser = require('./lib/entities_parser')
+  , entitiesParser = new EntitiesParser
+  , Tweet = require('./lib/tweet');
 
 var app = module.exports = express.createServer()
   , io = require('socket.io').listen(app);
@@ -39,8 +42,22 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 twit.stream('user', function(stream) {
   stream.on('data', function (data) {
+    var tweet, entities;
     if ('text' in data && 'entities' in data) {
-      io.sockets.emit('tweet', data.text);
+      entities = entitiesParser.parse(data.entities);
+      tweet = new Tweet({
+        "status_id": data.id
+      , "text": data.text
+      , "urls": entities.urls
+      , "hashtags": entities.hashtags
+      , "user_id": data.user.id
+      , "screen_name": data.user.screen_name
+      , "profile_image_url": data.user.profile_image_url
+      , "created_at": new Date(Date.parse(data.created_at))
+      });
+      if (tweet.hasUrl()) {
+        io.sockets.emit('tweet', tweet.data);
+      }
     }
   });
 });
